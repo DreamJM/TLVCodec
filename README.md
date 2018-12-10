@@ -3,13 +3,14 @@ TLV Message Codec Library
 
 ## TLV Format Introduction
 ### Default Header
-Default Header consists of 2 bytes Message Type and 4 bytes Message Length. 
+Default Header consists of 2 bytes Message Type, 2 bytes Message Length and 4 bytes Message Identity. 
 
-|&nbsp;Message Type&nbsp;&nbsp;&nbsp;(2 bytes)&nbsp;|<br/>
-|&nbsp;Message Length(4 bytes)&nbsp;|<br/>
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... TLV Fields ... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br/>
+|&nbsp;Message Type&nbsp;&nbsp;&nbsp;(2 bytes)&nbsp;&nbsp;|<br/>
+|&nbsp;Message Length(2 bytes)&nbsp;&nbsp;|<br/>
+|&nbsp;Message Identity(4 bytes)&nbsp;|<br/>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... TLV Fields ... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br/>
 
-Message Length is the total byte size of TLV Message except 'Message Type'.<br/>
+Message Length is the total byte size of TLV Message body and Message Identity.<br/>
 
 If you want to customize TLV Message Header, you can implements [IHeaderCodec](src/main/java/com/dream/codec/tlv/header/IHeaderCodec.java) 
 and pass it as constructor parameter when using [RawTLVCodec](src/main/java/com/dream/codec/tlv/codec/RawTLVCodec.java).
