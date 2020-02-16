@@ -48,19 +48,25 @@ private List<DemoObj> listObjs;
 
 ## Usage
 ### Installation
-##### Using Jar Directory
-[Packaged Jar](version/tlv-1.0.jar) is under ***'version'*** directory.
-
-##### Installing Locally
 ```
 mvn install
 ```
-After installing, you can add dependency in your pom.xml
+After installing, following dependencies can be added in your pom.xml
 ```
 <dependency>
     <groupId>com.dream.codec</groupId>
     <artifactId>tlv</artifactId>
-    <version>1.0</version>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>com.dream.codec</groupId>
+    <artifactId>tlv-spring</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>com.dream.codec</groupId>
+    <artifactId>tlv-spring-boot-starter</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 Or Gradle
@@ -72,13 +78,15 @@ repositories {
 
 dependencies {
     ...
-    compile('com.dream.codec:tlv:1.0')
+    compile('com.dream.codec:tlv:2.0.0')
+    compile('com.dream.codec:tlv-spring:2.0.0')
+    compile('com.dream.codec:tlv-spring-boot-starter:2.0.0')
     ...
 }
 ```
 
 ### Code Example
-[Demo Detail](src/test/java/com/dream/codec/tlv/DemoTest.java)
+[Demo Detail](tlv/src/test/java/com/dream/codec/tlv/DemoTest.java)
 ##### TLV Message Definition
 ```
 @TLVMsgBean(type = 2)
@@ -113,10 +121,46 @@ DemoMsg decodedMsg = codec.convertTo(codec.decode(encodeResult), DemoMsg.class);
 assertEquals(decodedMsg, msg);
 ```
 
+### Integration with Spring
+After adding dependency of 'tlv-spring', you can use _@TLVBeanScan_ in combination with _@Configuration_ to inject 
+_TLVContext_ and _TLVCodec_ automatically.
+```
+@TLVBeanScan("com.my.package.bean")
+@Configuration
+public class DemoConfiguration {
+    ...
+}
+```
+Instead of using default _TLVCodec_, you can use _RawTLVCodec_ by providing bean of _IHeaderCodec_ to customize 
+TLV message header. 
+```
+@TLVBeanScan("com.my.package.bean")
+@Configuration
+public class DemoConfiguration {
+    ...
+    @Bean
+    public IHeaderCodec<MyHeader> headerCodec() {
+        return new MyHeaderCodec();
+    }
+    ...
+}
+```
+### Integration with Spring Boot
+'tlv-spring' can be used as well, but 'tlv-spring-boot-starter' (Spring boot auto configuration) is recommended in 
+Spring Boot. After adding 'tlv-spring-boot-starter' dependency and configuration application.yml with following 
+property, _TLVContext_ and _TLVCodec_ will be injected automatically: 
+```
+dream:
+  tlv:
+    base-packages: com.my.package.bean
+```
+Same with 'tlv-spring', instead of using default _TLVCodec_, you can use _RawTLVCodec_ by providing bean of 
+_IHeaderCodec_ to customize TLV message header.
+
 ## License
 TLVCodec is released under the [Apache 2.0 license](LICENSE)
 
-    Copyright 2018 Meng Jiang.
+    Copyright 2018-2020 Meng Jiang.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
