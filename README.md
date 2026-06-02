@@ -1,4 +1,4 @@
-# TLVCodec
+# TLVCodec(deprecated)
 TLV Message Codec Library
 
 ## TLV Format Introduction
